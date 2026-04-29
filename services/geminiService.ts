@@ -10,7 +10,7 @@ if (!API_KEY) {
 }
 
 const ai = new GoogleGenAI({ apiKey: API_KEY || "MISSING_API_KEY" });
-const model: string = MODEL_NAME || "gemini-2.0-flash";
+const model: string = MODEL_NAME || "gemini-2.5-pro";
 
 const PROMPT = `Analyze the food items in this image. Identify distinct food items. If you see multiple identical instances of a food item (e.g., two identical tacos, three of the same cookies), group them. For each food item or group of identical items, provide:
 1. 'foodItem' (string): The name of the food.
@@ -49,6 +49,10 @@ export const analyzeImageForCalories = async (
         temperature: 0.2, 
       },
     });
+
+    if (!response.text) {
+      throw new Error("No text content in API response.");
+    }
 
     let jsonStr = response.text.trim();
     const fenceRegex = /^```(\w*)?\s*\n?(.*?)\n?\s*```$/s;
