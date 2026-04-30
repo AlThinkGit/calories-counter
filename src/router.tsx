@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { LanguageProvider, useLanguage } from "./context/LanguageContext";
 
@@ -26,7 +26,7 @@ const PrivateRoute = ({ element }: { element: React.ReactElement }) => {
 const Router: React.FC = () => (
   <LanguageProvider>
     <AuthProvider>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/" element={<PrivateRoute element={<CaloriesCounter />} />} />
@@ -34,7 +34,7 @@ const Router: React.FC = () => (
           <Route path="/family" element={<PrivateRoute element={<FamilyMembersPage />} />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </AuthProvider>
   </LanguageProvider>
 );

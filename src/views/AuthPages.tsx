@@ -15,9 +15,9 @@ const AuthPage = () => {
     if (currentUser) navigate("/", { replace: true });
   }, [currentUser, navigate]);
 
-  const handleLogin = async (email: string, password: string) => {
+  const handleLogin = async (email: string, password: string, rememberSession: boolean) => {
     try {
-      await login(email, password);
+      await login(email, password, rememberSession);
     } catch {
       // error shown via context
     }
@@ -88,20 +88,6 @@ const AuthPage = () => {
           ) : (
             <RegisterForm onSubmit={handleRegister} loading={loading} error={error} />
           )}
-        </div>
-
-        {/* Features hint */}
-        <div className="mt-6 grid grid-cols-3 gap-3 text-center">
-          {[
-            { icon: "📸", label: t("featurePhotoCalories") },
-            { icon: "📊", label: t("featureDailyHistory") },
-            { icon: "🎯", label: t("featureGoal") },
-          ].map((f) => (
-            <div key={f.label} className="bg-white/70 backdrop-blur rounded-xl p-3">
-              <div className="text-xl mb-1">{f.icon}</div>
-              <p className="text-xs text-slate-600 font-medium">{f.label}</p>
-            </div>
-          ))}
         </div>
       </div>
     </div>
