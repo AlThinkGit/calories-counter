@@ -5,6 +5,9 @@ import {
   signOut,
   onAuthStateChanged,
   updateProfile,
+  setPersistence,
+  browserLocalPersistence,
+  browserSessionPersistence,
   User,
 } from "firebase/auth";
 import { auth } from "../firebaseConfig";
@@ -22,7 +25,7 @@ interface AuthContextType {
   authLoading: boolean;
   loading: boolean;
   error: string | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string, rememberSession?: boolean) => Promise<void>;
   register: (payload: RegisterPayload) => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -53,10 +56,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return unsubscribe;
   }, []);
 
-  const login = useCallback(async (email: string, password: string) => {
+  const login = useCallback(async (email: string, password: string, rememberSession = true) => {
     setLoading(true);
     setError(null);
     try {
+      await setPersistence(
+        auth,
+        rememberSession ? browserLocalPersistence : browserSessionPersistence
+      );
       await signInWithEmailAndPassword(auth, email, password);
     } catch (err: any) {
       console.error("Firebase login error:", err?.code, err?.message);
@@ -71,6 +78,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLoading(true);
     setError(null);
     try {
+      await setPersistence(auth, browserLocalPersistence);
       const credential = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(credential.user, { displayName: nickname.trim() });
       const existingProfile = await getUserProfile(credential.user.uid);

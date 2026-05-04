@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useLanguage } from "../../context/LanguageContext";
 
 interface LoginFormProps {
-  onSubmit: (email: string, password: string) => Promise<void>;
+  onSubmit: (email: string, password: string, rememberSession: boolean) => Promise<void>;
   loading: boolean;
   error: string | null;
 }
@@ -11,11 +11,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, loading, error }) => {
   const { t } = useLanguage();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberSession, setRememberSession] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await onSubmit(email, password);
+    await onSubmit(email, password, rememberSession);
   };
 
   return (
@@ -71,6 +72,16 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, loading, error }) => {
           </button>
         </div>
       </div>
+
+      <label className="flex items-center gap-2 text-sm text-slate-600 select-none">
+        <input
+          type="checkbox"
+          checked={rememberSession}
+          onChange={(e) => setRememberSession(e.target.checked)}
+          className="h-4 w-4 rounded border-slate-300 text-emerald-500 focus:ring-emerald-500"
+        />
+        {t("rememberSession")}
+      </label>
 
       {error && (
         <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">

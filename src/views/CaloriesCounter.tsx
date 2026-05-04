@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { FoodCalorieInfo, FoodEntry, DailyLog } from "../../types";
 import { analyzeImageForCalories } from "../../services/geminiService";
 import {
@@ -28,6 +29,7 @@ const fileToBase64 = (file: File): Promise<{ base64: string; mimeType: string }>
   });
 
 const CaloriesCounter: React.FC = () => {
+  const navigate = useNavigate();
   const { currentUser } = useAuth();
   const { language, t } = useLanguage();
   const uid = currentUser?.uid ?? "";
@@ -302,6 +304,13 @@ const CaloriesCounter: React.FC = () => {
           <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-10 text-center">
             <h2 className="text-xl font-bold text-slate-800">{t("noActiveMemberTitle")}</h2>
             <p className="text-slate-500 mt-2">{t("noActiveMemberBody")}</p>
+            <button
+              type="button"
+              onClick={() => navigate("/family")}
+              className="mt-5 inline-flex items-center justify-center rounded-xl bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-600"
+            >
+              {t("addFamilyMember")}
+            </button>
           </div>
         ) : (
           <>
