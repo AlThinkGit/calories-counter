@@ -3,12 +3,14 @@ import LoginForm from "../components/forms/LoginForm";
 import RegisterForm from "../components/forms/RegisterForm";
 import { AuthContext } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
+import { useTheme } from "../context/ThemeContext";
 import { useNavigate } from "react-router-dom";
 
 const AuthPage = () => {
   const [view, setView] = useState<"login" | "register">("login");
   const { login, register, loading, error, currentUser } = useContext(AuthContext);
   const { t } = useLanguage();
+  const { isDark, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,6 +35,24 @@ const AuthPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 flex items-center justify-center p-4">
+      <button
+        type="button"
+        onClick={toggleTheme}
+        className="absolute top-4 right-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/80 text-slate-700 shadow-sm border border-slate-200 backdrop-blur-sm transition hover:bg-white"
+        aria-label={isDark ? t("switchToLight") : t("switchToDark")}
+        title={isDark ? t("switchToLight") : t("switchToDark")}
+      >
+        {isDark ? (
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364 6.364l-1.414-1.414M7.05 7.05 5.636 5.636m12.728 0-1.414 1.414M7.05 16.95l-1.414 1.414M12 8a4 4 0 100 8 4 4 0 000-8z" />
+          </svg>
+        ) : (
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12.79A9 9 0 1111.21 3c-.07.33-.11.67-.11 1.01a7 7 0 009.9 6.38z" />
+          </svg>
+        )}
+      </button>
+
       <div className="w-full max-w-md">
         {/* Logo / Brand */}
         <div className="text-center mb-8">

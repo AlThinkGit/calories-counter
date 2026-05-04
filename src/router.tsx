@@ -2,6 +2,7 @@ import React from "react";
 import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { LanguageProvider, useLanguage } from "./context/LanguageContext";
+import { ThemeProvider } from "./context/ThemeContext";
 
 import AuthPage from "./views/AuthPages";
 import CaloriesCounter from "./views/CaloriesCounter";
@@ -24,19 +25,21 @@ const PrivateRoute = ({ element }: { element: React.ReactElement }) => {
 };
 
 const Router: React.FC = () => (
-  <LanguageProvider>
-    <AuthProvider>
-      <HashRouter>
-        <Routes>
-          <Route path="/auth" element={<AuthPage />} />
-          <Route path="/" element={<PrivateRoute element={<CaloriesCounter />} />} />
-          <Route path="/app" element={<PrivateRoute element={<CaloriesCounter />} />} />
-          <Route path="/family" element={<PrivateRoute element={<FamilyMembersPage />} />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </HashRouter>
-    </AuthProvider>
-  </LanguageProvider>
+  <ThemeProvider>
+    <LanguageProvider>
+      <AuthProvider>
+        <HashRouter>
+          <Routes>
+            <Route path="/auth" element={<AuthPage />} />
+            <Route path="/" element={<PrivateRoute element={<CaloriesCounter />} />} />
+            <Route path="/app" element={<PrivateRoute element={<CaloriesCounter />} />} />
+            <Route path="/family" element={<PrivateRoute element={<FamilyMembersPage />} />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </HashRouter>
+      </AuthProvider>
+    </LanguageProvider>
+  </ThemeProvider>
 );
 
 export default Router;
